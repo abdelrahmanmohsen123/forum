@@ -4,8 +4,8 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Thread Title</div>
+            <div class="">
+
 
 
                     @if (session('status'))
@@ -13,23 +13,31 @@
                             {{ session('status') }}
                         </div>
                     @endif
-                    <div class="card-body">
+                    <div class="card">
                         {{-- //@dump($threads) --}}
-                        @foreach ($threads as $thread)
+                        @forelse ($threads as $thread)
+                        <div class="card-header my-3">Thread Title</div>
+                                <article class="card-body my-2">
+                                        <div class="level row">
+                                            <h4 class="col-8">
+                                                <a href="{{$thread->path()}}"> {{$thread->title}}</a>
 
-                                <article class="card-body">
+                                            </h4>
+                                            <a href="{{$thread->path()}}" class="col-3 " style="flex:1">{{ $thread->replies_count }} comments</a>
+                                        </div>
 
-                                        <h4>
-                                            <a href="{{$thread->path()}}"> {{$thread->title}}</a>
-
-                                        </h4>
                                         <div class="body">
                                             {{$thread->body}}
                                         </div>
                                         <hr>
                                 </article>
+                                @empty
 
-                        @endforeach
+                                <p>
+                                    There are no relevant result in now
+                                </p>
+
+                        @endforelse
                     </div>
                 </div>
 

@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Channel;
-use App\Models\Thread;
 use App\Models\User;
+use App\Models\Thread;
+use App\Models\Channel;
 use Illuminate\Http\Request;
+use App\Filters\ThreadFilter;
 
 class ThreadController extends Controller
 {
@@ -19,22 +20,12 @@ class ThreadController extends Controller
         $this->middleware('auth')->only('store','create');
 
     }
-    public function index(Channel $channel)
+    public function index(Channel $channel,ThreadFilter $filters)
     {
-        //
-        if($channel->exists){
-            $threads = $channel->threads()->latest();
-            //dd($threads);
-        }else{
-            $threads = Thread::latest();
-        }
 
-        if($username = request('by')){
-            $user = User::where('name',$username)->firstOrFail();
-            $threads->where('user_id',$user->id);
-        }
-        $threads = $threads->get();
 
+
+        $threads = $this->getThreads($channel,$filters);
        // dd($threads->toArray());
         return view('threads.index',compact('threads'));
 
@@ -81,7 +72,11 @@ class ThreadController extends Controller
     {
         //
 
-        return view('threads.show',compact('thread','channelId'));
+        return view('threads.show',[
+        'channelId'=>$channelId,
+        'thread'=>$thread,
+        'replies'=>$thread->replies()->paginate(1)
+        ]);
     }
 
     /**
@@ -106,5 +101,22 @@ class ThreadController extends Controller
     public function destroy(Thread $thread)
     {
         //
+        $this->authorize('update',$thread);
+        // if($thread->user_id != auth()->id()){
+        //     abort(403,'you dont have permission to do this');
+        // }
+        $thread->delete();
+        return redirect()->route('threads.index');
     }
+
+    public function getThreads($channel,$filters){
+        $threads = Thread::latest()->filter($filters);
+        if($channel->exists){
+            $threads->where('channel_id',$channel->id);
+            //dd($threads);
+        }
+        $threads = $threads->get();
+        return $threads;
+    }
+
 }

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ThreadController;
+use App\Models\Favourite;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,9 +30,16 @@ Route::post('/threads',[App\Http\Controllers\ThreadController::class, 'store']);
 
 
 Route::get('/threads/{channel}/{thread}',[App\Http\Controllers\ThreadController::class, 'show']);
+// Route::delete('/threads/{channel}/{thread}',[App\Http\Controllers\ThreadController::class, 'destroy']);
+
  Route::post('/threads/{channel}/{thread}/replies',[App\Http\Controllers\ReplyController::class, 'store'])->name('add_reply_to_thread');
 
 Route::resource('threads',ThreadController::class);
+
+
+Route::post('/replies/{reply}/favorite',[App\Http\Controllers\FavouritesController::class, 'store'])->name('favorites.store');
+
+Route::get('/profiles/{user}',[App\Http\Controllers\ProfilesController::class, 'show'])->name('profiles.show');
 
 Auth::routes();
 
