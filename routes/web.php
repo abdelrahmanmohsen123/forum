@@ -38,8 +38,10 @@ Route::resource('threads',ThreadController::class);
 
 
 Route::post('/replies/{reply}/favorite',[App\Http\Controllers\FavouritesController::class, 'store'])->name('favorites.store');
+Route::get('/replies/{reply}',[App\Http\Controllers\ReplyController::class, 'destroy'])->name('replies.destroy');
 
 Route::get('/profiles/{user}',[App\Http\Controllers\ProfilesController::class, 'show'])->name('profiles.show');
+
 
 Auth::routes();
 

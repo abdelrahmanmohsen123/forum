@@ -11,37 +11,23 @@
                     <small>Since {{  $profileUser->created_at->diffForHumans() }}</small>
                     <hr>
                 </h1>
-                @foreach ($threads as $thread)
+                @foreach ($activities as $date => $activity)
                 <div class="card  my-3">
+                    <h3>{{ $date }}</h3>
                     <div class="card-header">
 
-                        {{ $profileUser->name }} posted
-                        <a href="{{route('threads.show',$thread->id)}}">
-                            {{$thread->title}}
-                        </a>
 
+                        @foreach ($activity as $record)
+                            @if (view()->exists("profiles.activities.{$record->type}"))
+                                @include("profiles.activities.{$record->type}" ,['activity'=>$record])
+
+                            @endif
+
+                        @endforeach
                     </div>
 
-                    <div class="card-body">
-                        <article class="card-body">
 
-                                <h4 style="display: flex">
-                                    <span class="flex" >
-                                        {{$thread->title}}
-                                    </span>
-                                    <span >
-                                        {{ $thread->created_at->diffForHumans() }}
-                                    </span>
-
-
-                                </h4>
-                                <div class="body">
-                                    {{$thread->body}}
-                                </div>
-                                <hr>
-                        </article>
-                    </div>
-                    {{ $threads->links('pagination::bootstrap-5') }}
+                    {{-- {{ $threads->links('pagination::bootstrap-5') }} --}}
 
 
                 </div>

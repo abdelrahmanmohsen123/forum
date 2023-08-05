@@ -13,6 +13,11 @@ trait RecordActivity{
             $thread->recordActivities('created');
         });
 
+        static::deleting(function($model){
+            $model->activity()->delete();
+
+        });
+
     }
 
 

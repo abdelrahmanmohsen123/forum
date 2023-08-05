@@ -112,7 +112,8 @@
 
 
             </div>
-                @if (auth()->check())
+            @endif
+                @if(auth()->check())
 
 
 
@@ -136,7 +137,7 @@
 
             <p class="text-center">please <a href="{{route('login')}}">sign in</a>  to partisipate this discussion</p>
                 @endif
-             @endif
+
         </div>
 
     </div>

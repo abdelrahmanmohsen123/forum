@@ -27,4 +27,16 @@ class ReplyController extends Controller
         return back();
 
    }
+
+
+   public function destroy(Reply $reply)
+    {
+        //
+        $this->authorize('update',$reply);
+        // if($reply->user_id != auth()->id()){
+        //     abort(403,'you dont have permission to do this');
+        // }
+        $reply->delete();
+        return redirect()->back()->with('success','reply deleted successfully');
+    }
 }
